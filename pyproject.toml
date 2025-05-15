@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "palestinian-task"
+version = "0.1.0"
+description = ""
+authors = ["Kirill Chirkunov <kirill.chirkunov@gmail.com>"]
+package-mode = false
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<4"
+pytimeparse = "^1.1.8"
+timeparse-plus = "^1.2.0"
+yt-dlp = "^2025.1.15"
+tqdm = "^4.67.1"
+setuptools = ">=70.0.0"
+cython = "^3.0.11"
+torch = { version = "^2.4.1", source = "pytorch-cpu" }
+numpy = ">=1.22,<2"
+omegaconf = "^2.3.0"
+nemo-toolkit = {extras = ["asr"], version = "^2.1.0"}
+langchain = "^0.3.15"
+google-cloud-aiplatform = "^1.78.0"
+langchain-core = "^0.3.31"
+python-dotenv = "^1.0.1"
+langchain-openai = "^0.3.1"
+langchain-google-genai = "^2.0.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"

@@ -1,3 +1,6 @@
+emirati_videos/
+emirati_videos_transcripts/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -167,8 +170,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-# Ruff stuff:
-.ruff_cache/
-
 # PyPI configuration file
 .pypirc
+output
+*.wav
+emirati_videos/
+emirati_videos_texts/
+emirati_videos_texts_check/
