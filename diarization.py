@@ -19,18 +19,25 @@ def write_processed_file(file):
         f.write(file + "\n")
         f.flush()
 
-def get_processed_files():
+def get_processed_files2():
     with open("processed_files.txt", 'r') as f:
         processed_files = f.readlines()
     processed_files = [file.strip() for file in processed_files]
     return set(processed_files)
 
+def  get_processed_file_ids():
+    files = list(glob('output/pred_rttms/*.*'))
+    return list([os.path.basename(file).split('.')[0] for file in files])
+
+
 def diarize():
     files = list(glob('palestinian_videos/*.*'))
     f_len = len(files)
-    processed_files = get_processed_files()
+    processed_files = get_processed_files2()
+    processed_file_ids = get_processed_file_ids()
     for i, file in enumerate(files):
-        if file in processed_files:
+        file_id = os.path.basename(file).split('.')[0]
+        if file_id in processed_file_ids:
             print(f"Skipping {file} because it has already been processed")
             continue
         print(f"Processing file {i+1} of {f_len}")
