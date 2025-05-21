@@ -40,8 +40,8 @@ def fetch_video_metadata(video_url):
 
 def presample_videos(sample_size):
     cdf = pd.DataFrame()
-    for file in os.listdir("emirati_playlists_videos"):
-        df = pd.read_csv(f"emirati_playlists_videos/{file}")
+    for file in os.listdir("palestinian_playlists_videos"):
+        df = pd.read_csv(f"palestinian_playlists_videos/{file}")
         # Convert upload_date to datetime
         df['upload_date'] = pd.to_datetime(df['upload_date'], format='%Y%m%d')
 
@@ -62,28 +62,28 @@ def presample_videos(sample_size):
         cdf = pd.concat([cdf, df])
         
     print(len(cdf))
-    cdf.to_csv("emirati_playlists_videos_presampled.csv", index=False)
+    cdf.to_csv("palestinian_playlists_videos_presampled.csv", index=False)
 
 
 def get_transcripts_metadata():
   
     script_directory = os.path.dirname(os.path.abspath(__file__))
     
-    with open(os.path.join(script_directory, "emirati_playlists.txt"), "r") as playlist_file:
+    with open(os.path.join(script_directory, "palestinian_playlists.txt"), "r") as playlist_file:
         playlist_urls = playlist_file.readlines()
         
     playlist_urls = [url.strip() for url in playlist_urls]
     
     playlist_urls = [url for url in set(playlist_urls)]
   
-    with open(os.path.join(script_directory, "emirati_playlists_processed.txt"), "r") as processed_file:
+    with open(os.path.join(script_directory, "palestinian_playlists_processed.txt"), "r") as processed_file:
         processed = processed_file.readlines()
         
     processed = set([url.strip() for url in processed])
     
     playlist_urls = [url for url in playlist_urls if url not in processed]
         
-    with open(os.path.join(script_directory, "emirati_playlists_processed.txt"), "a") as processed_file:
+    with open(os.path.join(script_directory, "palestinian_playlists_processed.txt"), "a") as processed_file:
       
         playlists_len = len(playlist_urls)
         
@@ -116,7 +116,7 @@ def get_transcripts_metadata():
               
               emirati_playlist_df.drop(columns=["duration"], inplace=True)
               
-              emirati_playlist_df.to_csv(os.path.join(script_directory, "emirati_playlists_videos", f"{channel_id}.csv"), index=False)
+              emirati_playlist_df.to_csv(os.path.join(script_directory, "palestinian_playlists_videos", f"{channel_id}.csv"), index=False)
               # Print each metadata line (duration, upload_date)
               for line in results:
                   print(line)
@@ -128,7 +128,7 @@ def get_transcripts_metadata():
                 continue
 
 if __name__ == "__main__":
-    presample_videos(10000)
+    presample_videos(50)
 #    get_transcripts_metadata()
 
 

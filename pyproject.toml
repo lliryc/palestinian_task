@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "palestinian-task"
 version = "0.1.0"
-description = ""
+description = "Palestinian Task"
 authors = ["Kirill Chirkunov <kirill.chirkunov@gmail.com>"]
 package-mode = false
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.12,<4"
+python = ">=3.12,<3.13"
 pytimeparse = "^1.1.8"
 timeparse-plus = "^1.2.0"
 yt-dlp = "^2025.1.15"
@@ -24,6 +24,13 @@ langchain-core = "^0.3.31"
 python-dotenv = "^1.0.1"
 langchain-openai = "^0.3.1"
 langchain-google-genai = "^2.0.9"
+langchain-anthropic = "^0.3.4"
+pyarabic = "^0.6.15"
+google-api-python-client = "^2.161.0"
+google-auth-httplib2 = "^0.2.0"
+google-auth-oauthlib = "^1.2.1"
+fasttext = "^0.9.3"
+emoji = "^2.14.1"
 
 
 [build-system]
