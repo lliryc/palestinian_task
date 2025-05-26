@@ -1,5 +1,5 @@
-emirati_videos/
-emirati_videos_transcripts/
+palestinian_videos/
+palestinian_videos_transcripts/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -182,3 +182,4 @@ output
 *passages/
 *.zip
 *nohup*
+*credentials*
