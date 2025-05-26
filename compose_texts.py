@@ -13,6 +13,7 @@ import multiprocessing
 import numpy as np
 import re
 import math
+from glob import glob
 
 dotenv.load_dotenv()
 
@@ -22,7 +23,7 @@ MIN_TOKENS_PER_PARAGRAPH = 150
 
 api_key = os.getenv("OPENAI_API_KEY")
 
-model = ChatOpenAI(model="o1-mini", api_key=api_key)
+model = ChatOpenAI(model="o3-mini", api_key=api_key)
 
 def speaker2text(speaker_id):
   sid = speaker_id.split('_')[1]
@@ -44,7 +45,7 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 def get_transcripts_dict():
 
-  transcripts = glob("syrian_videos_transcripts/*.json")
+  transcripts = glob("palestinian_videos_transcripts/*.json")
   return {os.path.splitext(os.path.basename(t))[0]: t for t in transcripts}
 
 transcripts_dict = get_transcripts_dict()
@@ -180,14 +181,19 @@ def merge_text_blocks_by_speaker_id(json_transcript):
 #  return response.content
 
 def get_processed_videos():
-  with open("syrian_videos_transcripts_processed.txt", "r") as f:
+  with open("palestinian_videos_transcripts_processed.txt", "r") as f:
     lines = f.readlines()
     return set([line.strip() for line in lines])
 
-processed_videos = get_processed_videos()
+def get_file_ids():
+  files = glob("palestinian_videos_texts/*.*")
+  file_ids = [os.path.splitext(os.path.basename(f))[0] for f in files]
+  return list(set(file_ids))
+
+processed_videos = get_file_ids()
 
 def write_processed_videos(video_ids):
-  with open("syrian_videos_transcripts_processed.txt", "a") as f:
+  with open("palestinian_videos_transcripts_processed.txt", "a") as f:
     for video_id in video_ids:
       f.write(video_id + "\n")
 
@@ -202,8 +208,8 @@ def adjust_speech_ids(text_list):
 
 segmentation_output_schema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Syrian Arabic Transcript Segmentation",
-  "description": "A list of segmentation markers for Syrian Arabic transcripts. Each object indicates punctuation mark is inserted next to text item with the given id",
+  "title": "Palestinian Arabic Transcript Segmentation",
+  "description": "A list of segmentation markers for Palestinian Arabic transcripts. Each object indicates punctuation mark is inserted next to text item with the given id",
   "type": "array",
   "items": {
     "type": "object",
@@ -253,7 +259,7 @@ def compose_text(video_id):
   
   tokens_exceeded = False
 
-  with open(f"syrian_videos_texts/{video_id}.txt", "w") as f:
+  with open(f"palestinian_videos_texts/{video_id}.txt", "w") as f:
 
     merged_transcript = merge_text_blocks_by_speaker_id(enriched_transcript_6min)
         
@@ -270,14 +276,14 @@ def compose_text(video_id):
       segmentation_output = None
       
       while tries < 10:
-        prompt1 = f"""Take Syrian Arabic transcript in a JSON format and add punctuation marks between text items if needed by analyzing the text as well as start and end times. Return result in a JSON format according to output schema without any disclaimer.
+        prompt1 = f"""Take Palestinian Arabic transcript in a JSON format and add punctuation marks between text items if needed by analyzing the text as well as start and end times. Return result in a JSON format according to output schema without any disclaimer.
 
       Output schema:
       JSON```
       {json.dumps(segmentation_output_schema)}
       ```
 
-      Syrian Arabic transcript:
+      Palestinian Arabic transcript:
       JSON```
       {json.dumps(ttext_list)}
       ```"""        
@@ -312,7 +318,7 @@ def compose_text(video_id):
     
   if tokens_exceeded:
     print(f"Skipping {video_id} because it has more than {MAX_TOKENS} tokens")
-    os.remove(f"syrian_videos_texts/{video_id}.txt")
+    os.remove(f"palestinian_videos_texts/{video_id}.txt")
   
   print(f"Finished processing of {video_id}")
 
@@ -329,7 +335,7 @@ def compose_text2(video_id):
     print(f"No enriched transcript for {video_id}")
     return
   
-  with open(f"syrian_videos_texts/{video_id}.txt", "w") as f:
+  with open(f"palestinian_videos_texts/{video_id}.txt", "w") as f:
     merged_transcript = merge_text_blocks_by_speaker_id(enriched_transcript_6min)
         
     for text_block in merged_transcript:      

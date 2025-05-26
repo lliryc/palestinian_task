@@ -15,13 +15,13 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-punctuation_prompt = ChatPromptTemplate.from_template("""You are Syrian Arabic speaker. Your task is to correct the punctuation in the Syrian Arabic text below. Don't change words, just correct the punctuation. Return only the corrected text without any other explanation.
+punctuation_prompt = ChatPromptTemplate.from_template("""You are Palestinian Arabic speaker. Your task is to correct the punctuation in the Palestinian Arabic text below. Don't change words, just correct the punctuation. Return only the corrected text without any other explanation.
 
 {text}""")
 
 # Anthropic model
 llm_openai = ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=OPENAI_API_KEY)
-
+#llm_openai = ChatOpenAI(model='gpt-4.5-preview', temperature=0.7, api_key=OPENAI_API_KEY)
 
 def run_prompt(prompt, text):
     chain = prompt | llm_openai
@@ -50,21 +50,34 @@ def paragraph_required(text):
         return False    
     return True
 
-paragraphs_prompt = ChatPromptTemplate.from_template("""You are Syrian Arabic speaker. Your task is to split Syrian Arabic text into paragraphs if it makes sense. Otherwise, return the original text. Don't change words and punctuation. Return only the corrected text without any disclaimers.
+paragraphs_prompt = ChatPromptTemplate.from_template("""You are Palestinian Arabic speaker. Your task is to split Palestinian Arabic text into paragraphs if it makes sense. Otherwise, return the original text. Don't change words and punctuation. Return only the corrected text without any disclaimers.
 
 {text}""")
 
 
+def get_file_ids():
+    files = glob.glob("palestinian_videos_texts_punct_corrected/*.txt")
+    file_ids = [os.path.splitext(os.path.basename(f))[0] for f in files]
+    return file_ids
+
 if __name__ == "__main__":
 
-    for file in tqdm(glob.glob("syrian_videos_texts_check/*.txt")):
+    file_ids = get_file_ids()
+
+    for file in tqdm(glob.glob("palestinian_videos_texts/*.txt")):
         file_name = file.split("/")[-1]
+        file_id = os.path.splitext(file_name)[0]
+
+        if file_id in file_ids:
+            print(f"Skipping {file_name} because it already exists")
+            continue
+
         processed = False
         
         with open(file, "r", encoding="utf-8") as f:
             raw_text = f.read()
         
-        with open(f"syrian_videos_texts_punct_corrected/{file_name}", "w", encoding="utf-8") as f:
+        with open(f"palestinian_videos_texts_punct_corrected/{file_name}", "w", encoding="utf-8") as f:
             speakers_blocks = raw_text.split("\n\n\n\n")
             for speaker_block in speakers_blocks:
                 if speaker_block.strip() == "":
@@ -78,7 +91,10 @@ if __name__ == "__main__":
                     processed = False
                     break
 
+                merge_text = None
+
                 tries = 0
+
                 while tries < 5:
                     try:
                         distorted_text = run_prompt(punctuation_prompt, speaker_text)
@@ -116,7 +132,7 @@ if __name__ == "__main__":
         
         if not processed:
             print(f"Failed to process {file_name}")
-            os.remove(f"syrian_videos_texts_punct_corrected/{file_name}")
+            os.remove(f"palestinian_videos_texts_punct_corrected/{file_name}")
 
 
 

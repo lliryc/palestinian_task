@@ -178,4 +178,7 @@ output
 *_videos_texts/
 *_videos_texts_check/
 *_playlists_videos/
+*videos*/
+*passages/
+*.zip
 *nohup*

@@ -35,11 +35,14 @@ def diarize():
     f_len = len(files)
     processed_files = get_processed_files2()
     processed_file_ids = get_processed_file_ids()
+    print(processed_file_ids)
     for i, file in enumerate(files):
         file_id = os.path.basename(file).split('.')[0]
         if file_id in processed_file_ids:
             print(f"Skipping {file} because it has already been processed")
             continue
+        print("file_id:")
+        print(file_id)
         print(f"Processing file {i+1} of {f_len}")
         # Get the base filename without extension
         base_name = os.path.splitext(os.path.basename(file))[0]

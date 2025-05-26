@@ -22,8 +22,8 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 prompt = ChatPromptTemplate.from_template("""You are professional linguist. You are helping me with following:
-Extract passage from a source text in Syrian Arabic for reading comprehension task. 
-### Target audience: Syrian Arabic speakers.
+Extract passage from a source text in Palestinian Arabic for reading comprehension task. 
+### Target audience: Palestinian Arabic speakers.
 ### Passage selection criteria: 
 - Select a consistent part of a source text suitable for inference and analytical questions
 - Must consist of complete sentences only (no partial sentences at start or end)
@@ -62,7 +62,7 @@ def extract(text):
 
 
 def get_processed_passages():
-  with open("syrian_processed_passages.txt", "r") as f:
+  with open("palestinian_processed_passages.txt", "r") as f:
     lines = f.readlines()
     return set([line.strip() for line in lines])
 
@@ -85,7 +85,7 @@ def get_punkt_indices(text):
 processed_passages = get_processed_passages()
 
 def add_processed_passages(files):
-  with open("syrian_processed_passages.txt", "a") as f:
+  with open("palestinian_processed_passages.txt", "a") as f:
     for file in files:
       f.write(file + "\n")
 
@@ -154,7 +154,7 @@ def extract_passage(source_text_file):
     return False
   
   if cnt_tokens <= 600:
-    output_file = f"syrian_passages/{filename}"
+    output_file = f"palestinian_passages/{filename}"
     with open(output_file, "w") as f:
       f.write(text)
     print(f"{output_file} is saved")
@@ -198,7 +198,7 @@ def extract_passage(source_text_file):
       continue
     
   if passage is not None:
-    output_file = f"syrian_passages/{filename}"
+    output_file = f"palestinian_passages/{filename}"
     with open(output_file, "w") as f:
       f.write(passage)
     print(f"{output_file} is saved")
@@ -206,7 +206,7 @@ def extract_passage(source_text_file):
   return passage is not None
 
 if __name__ == "__main__":    
-    input_files = glob.glob("syrian_videos_texts2/*.txt")
+    input_files = glob.glob("palestinian_videos_texts_punct_corrected/*.txt")
     processed = get_processed_passages()
     input_files = [file for file in input_files if file not in processed]
 
