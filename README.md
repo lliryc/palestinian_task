@@ -1,1 +1,1 @@
-# emirati_task
+# palestinian_task
